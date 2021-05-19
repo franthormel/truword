@@ -14,7 +14,8 @@ class PaddingManager {
 
   //Display is 411 x 683
   //Vertical is 411 * _kWidthRow = 8.22
-  static EdgeInsets minWidthPad(BuildContext context) => _horizontal(
+  static EdgeInsets minWidthPad(BuildContext context) =>
+      _horizontal(
         context: context,
         kHeightFactor: _kWidthHome,
       );
@@ -22,7 +23,8 @@ class PaddingManager {
   //Display is 411 x 683
   //Vertical is 411 * _kWidth = 8.22
   //Horizontal is 683 * _kHeight = 27.32
-  static EdgeInsets home(BuildContext context) => _symmetric(
+  static EdgeInsets home(BuildContext context) =>
+      _symmetric(
         context: context,
         kHeightFactor: _kHeightHome,
         kWidthFactor: _kWidthHome,
@@ -32,7 +34,8 @@ class PaddingManager {
   //Vertical is 411 * .02 = 8.22
   //Horizontal is 683 * .04 = 27.32
   ///Returns symmetric [EdgeInsets]
-  static EdgeInsets contents(BuildContext context) => _symmetric(
+  static EdgeInsets contents(BuildContext context) =>
+      _symmetric(
         context: context,
         kHeightFactor: _kHeightGame,
         kWidthFactor: _kWidthGame,
@@ -43,7 +46,9 @@ class PaddingManager {
     required double kWidthFactor,
     required double kHeightFactor,
   }) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery
+        .of(context)
+        .size;
     final vertical = size.height * kHeightFactor;
     final horizontal = size.width * kWidthFactor;
 
@@ -57,7 +62,9 @@ class PaddingManager {
     required BuildContext context,
     required double kHeightFactor,
   }) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery
+        .of(context)
+        .size;
     final horizontal = size.height * kHeightFactor;
 
     return EdgeInsets.symmetric(

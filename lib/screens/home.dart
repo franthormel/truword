@@ -26,7 +26,9 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final padding = PaddingManager.home(context);
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery
+        .of(context)
+        .size;
     final styleText = theme.textTheme.headline5;
     final sizeHome = SizeManager.home(size);
     final sizeLogo = SizeManager.logo(size);

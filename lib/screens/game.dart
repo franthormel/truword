@@ -50,7 +50,10 @@ class _WordGameState extends State<WordGame> {
       minimumSize:
       MaterialStateProperty.all<Size>(SizeManager.game(media.size)),
       textStyle: MaterialStateProperty.all<TextStyle>(
-          Theme.of(context).textTheme.headline5!),
+          Theme
+              .of(context)
+              .textTheme
+              .headline5!),
     );
 
     return Column(
@@ -91,7 +94,8 @@ class _WordGameState extends State<WordGame> {
       builder: (context) {
         final theme = Theme.of(context);
         final style = ButtonStyle(
-          textStyle: MaterialStateProperty.all<TextStyle>(theme.textTheme.headline5!),
+          textStyle: MaterialStateProperty.all<TextStyle>(
+              theme.textTheme.headline5!),
         );
 
         return WillPopScope(
@@ -168,7 +172,10 @@ class _WordGameState extends State<WordGame> {
         builder: (context) {
           final style = ButtonStyle(
             textStyle: MaterialStateProperty.all<TextStyle>(
-                Theme.of(context).textTheme.headline5!),
+                Theme
+                    .of(context)
+                    .textTheme
+                    .headline5!),
           );
 
           return WillPopScope(
@@ -226,6 +233,7 @@ class _WordGameState extends State<WordGame> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final controls = buttons();

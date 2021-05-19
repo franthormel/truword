@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../constants/enums.dart';
-import '../theme.dart';
+import '../manager/padding.dart';
+import '../manager/size.dart';
+import '../models/enums.dart';
 import 'dialog_option.dart';
 
-const _kImgHeightFactor = .17;
-
-const _kBtnWidthFactor = .71;
-const _kBtnHeightFactor = .08;
-
 class Homepage extends StatelessWidget {
-  final assetImg = "assets/images/logo_light.png";
-
-  ///Returns [List] of time limit options
-  List<Widget> timeOptions(BuildContext context) {
+  ///Returns [List] of [TimeLimit] as dialog options
+  List<Widget> options(BuildContext context) {
     final options = <Widget>[];
 
-    for (TimeLimit timeLimit in TimeLimit.values) {
+    for (final timeLimit in TimeLimit.values) {
       options.add(
         TimerDialogOption(
           dialogContext: context,
@@ -32,60 +26,66 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
-    final btnTextStyle = theme.textTheme.headline4;
-    final btnWidth = size.width * _kBtnWidthFactor;
-    final btnHeight = size.height * _kBtnHeightFactor;
-    final imgHeight = size.height * _kImgHeightFactor;
+
+    final styleText = theme.textTheme.headline5;
+
+    final sizeLogo = SizeManager.logo(size);
+    final sizeHome = SizeManager.home(size);
+    final padding = PaddingManager.home(context);
 
     return Scaffold(
       backgroundColor: theme.accentColor,
       body: Padding(
-        padding: PaddingManager.home(context),
+        padding: padding,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Divider(
-              color: Colors.transparent,
-            ),
-            Column(
-              children: [
-                Image.asset(
-                  assetImg,
-                  width: size.width,
-                  height: imgHeight,
-                ),
-                Text(
-                  "Truword",
-                  style: theme.textTheme.headline3,
-                ),
-              ],
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                textStyle: MaterialStateProperty.all<TextStyle>(btnTextStyle!),
-                minimumSize: MaterialStateProperty.all<Size>(
-                  Size(btnWidth, btnHeight),
-                ),
+          children: <Widget>[
+            Flexible(
+              child: FractionallySizedBox(
+                heightFactor: .1,
               ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (context) {
-                    return SimpleDialog(
-                      title: Text(
-                        "Select Timer",
-                        textAlign: TextAlign.center,
-                        style: btnTextStyle.copyWith(
-                          fontWeight: FontWeight.w500,
+            ),
+            Flexible(
+              child: Column(
+                children: <Widget>[
+                  Image.asset(
+                    "assets/images/logo.png",
+                    height: sizeLogo,
+                    width: size.width,
+                  ),
+                  Text(
+                    "Truword",
+                    style: theme.textTheme.headline3,
+                  ),
+                ],
+              ),
+            ),
+            Flexible(
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  textStyle: MaterialStateProperty.all<TextStyle>(styleText!),
+                  minimumSize: MaterialStateProperty.all<Size>(sizeHome),
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (context) {
+                      return SimpleDialog(
+                        children: options(context),
+                        title: Text(
+                          "Select Timer",
+                          style: styleText.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                      children: timeOptions(context),
-                    );
-                  },
-                );
-              },
-              child: Text("START"),
+                      );
+                    },
+                  );
+                },
+                child: Text("START"),
+              ),
             ),
           ],
         ),

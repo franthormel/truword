@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
+import '../manager/padding.dart';
 
 class DialogRow extends StatelessWidget {
   final String textLeft;
@@ -16,7 +16,7 @@ class DialogRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final btnTextStyle = theme.textTheme.headline4;
+    final btnTextStyle = theme.textTheme.headline5;
 
     return Padding(
       padding: PaddingManager.minWidthPad(context),
@@ -25,9 +25,7 @@ class DialogRow extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: callback as void Function()? ?? () {},
-            child: Text(
-              textRight,
-            ),
+            child: Text(textRight),
             style: ButtonStyle(
               textStyle: MaterialStateProperty.all<TextStyle>(btnTextStyle!),
               foregroundColor:
@@ -38,9 +36,7 @@ class DialogRow extends StatelessWidget {
           ),
           Text(
             textLeft,
-            style: theme.textTheme.headline4!.copyWith(
-              color: theme.primaryColor,
-            ),
+            style: theme.textTheme.headline5,
           ),
         ],
       ),

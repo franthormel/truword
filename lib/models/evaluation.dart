@@ -13,7 +13,7 @@ class Evaluation {
     correct = 0;
 
     for (Answer answer in answers) {
-      if (answer.isCorrect) {
+      if (answer.correct) {
         correct++;
       }
     }
@@ -25,7 +25,7 @@ class Evaluation {
   ///Returns [double] as percentage between [correct] over [total]
   ///
   /// If resulting value is invalid returns 0
-  double get percentCorrect {
+  double get percentage {
     final value = (correct / total) * 100;
 
     return value.isNaN || value.isInfinite || value <= 0 ? 0 : value;
@@ -34,8 +34,8 @@ class Evaluation {
   ///Returns [String] format of [percentage]
   ///
   ///[percentage] with decimal values are rounded to one (1) decimal place.
-  String percentCorrectString() {
-    final percent = percentCorrect;
+  String percentageText() {
+    final percent = percentage;
 
     return percent % 1 == 0
         ? "${percent.toStringAsFixed(0)}%"

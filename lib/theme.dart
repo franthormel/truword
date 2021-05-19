@@ -87,16 +87,14 @@ TextStyle _buildButtonTextStyle() {
 TextTheme _buildTextThemeBase(TextTheme base) {
   return base
       .copyWith(
-        headline3: base.headline3!.copyWith(
-          fontWeight: FontWeight.w500,
-        ),
         headline4: base.headline4!.copyWith(
-          fontSize: kFontSizeHeadline3,
+          fontWeight: FontWeight.w500,
         ),
       )
       .apply(
-        fontFamily: 'Roboto',
+        bodyColor: kSwatchPrimary,
         displayColor: kSwatchPrimary,
+        fontFamily: 'Roboto',
       );
 }
 

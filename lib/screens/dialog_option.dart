@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/enums.dart';
+import '../models/enums.dart';
 import '../models/game_settings.dart';
 import '../models/game_state.dart';
 import 'contents.dart';
@@ -22,10 +22,8 @@ class TimerDialogOption extends StatelessWidget {
       timeLimit: timeLimit,
     );
     final action = () {
-      //Close dialog
       Navigator.of(dialogContext, rootNavigator: true).pop();
 
-      //Display new page
       Navigator.push(
         context,
         MaterialPageRoute(

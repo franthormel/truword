@@ -4,5 +4,5 @@ import 'enums.dart';
 const timeLimitSeconds = {
   TimeLimit.long: 120,
   TimeLimit.regular: 60,
-  TimeLimit.quick: 10,
+  TimeLimit.quick: 30,
 };

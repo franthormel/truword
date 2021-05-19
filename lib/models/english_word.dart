@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import '../data/words_false.dart';
-import '../data/words_true.dart';
+import 'data/words_false.dart';
+import 'data/words_true.dart';
 
 class EnglishWord {
   late String text;

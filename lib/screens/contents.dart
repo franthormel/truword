@@ -2,12 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../manager/padding.dart';
+import '../manager/size.dart';
 import '../models/game_state.dart';
-import '../theme.dart';
 import 'display_row.dart';
-
-const _kBtnWidthFactor = .67;
-const _kBtnHeightFactor = .07;
 
 class Contents extends StatefulWidget {
   final GameState gameState;
@@ -76,10 +74,6 @@ class _ContentsState extends State<Contents> {
       barrierDismissible: false,
       builder: (context) {
         final theme = Theme.of(context);
-        final btnStyle = ButtonStyle(
-          textStyle:
-              MaterialStateProperty.all<TextStyle>(theme.textTheme.headline4!),
-        );
 
         return WillPopScope(
           onWillPop: () async => false,
@@ -87,13 +81,10 @@ class _ContentsState extends State<Contents> {
             title: Text(
               widget.gameState.settings.resultsText(),
               textAlign: TextAlign.center,
-              style: theme.textTheme.headline4!.apply(
-                color: theme.primaryColor,
-              ),
             ),
             children: [
               Text(
-                eval.percentCorrectString(),
+                eval.percentageText(),
                 textAlign: TextAlign.center,
                 style: theme.textTheme.headline2,
               ),
@@ -120,7 +111,6 @@ class _ContentsState extends State<Contents> {
                 child: Column(
                   children: [
                     ElevatedButton.icon(
-                      style: btnStyle,
                       label: Text("REPLAY"),
                       icon: Icon(Icons.replay),
                       onPressed: () {
@@ -128,7 +118,6 @@ class _ContentsState extends State<Contents> {
                       },
                     ),
                     TextButton.icon(
-                      style: btnStyle,
                       label: Text("Home"),
                       icon: Icon(Icons.home),
                       onPressed: () {
@@ -166,18 +155,12 @@ class _ContentsState extends State<Contents> {
         context: context,
         barrierDismissible: false,
         builder: (context) {
-          final btnTextStyle = Theme.of(context).textTheme.headline4;
-
           return WillPopScope(
             onWillPop: () async => false,
             child: SimpleDialog(
               children: [
                 SimpleDialogOption(
                   child: ElevatedButton.icon(
-                    style: ButtonStyle(
-                      textStyle:
-                          MaterialStateProperty.all<TextStyle>(btnTextStyle!),
-                    ),
                     icon: Icon(Icons.play_arrow),
                     label: Text("Resume"),
                     onPressed: () {
@@ -196,25 +179,47 @@ class _ContentsState extends State<Contents> {
     }
   }
 
-  ///Return buttons separated by a transparent divider depending on settings
-  ButtonStyle btnStyle(MediaQueryData media) {
-    final btnWidth = media.size.width * _kBtnWidthFactor;
-    final btnHeight = media.size.height * _kBtnHeightFactor;
-    final btnTextStyle = Theme.of(context).textTheme.headline4;
+  Widget buttonOrientation() {
+    final media = MediaQuery.of(context);
+    final style = ButtonStyle(
+      minimumSize:
+          MaterialStateProperty.all<Size>(SizeManager.game(media.size)),
+    );
 
-    return ButtonStyle(
-      textStyle: MaterialStateProperty.all<TextStyle>(btnTextStyle!),
-      minimumSize: MaterialStateProperty.all<Size>(
-        Size(btnWidth, btnHeight),
-      ),
+    return Column(
+      children: <Widget>[
+        ElevatedButton(
+          style: style,
+          onPressed: _stopwatch.isRunning
+              ? () {
+                  evaluateAnswer(true);
+                }
+              : null,
+          child: Text("CORRECT"),
+        ),
+        if (media.orientation == Orientation.portrait)
+          Divider(
+            color: Colors.transparent,
+          ),
+        OutlinedButton(
+          style: style,
+          child: Text("WRONG"),
+          onPressed: _stopwatch.isRunning
+              ? () {
+                  evaluateAnswer(false);
+                }
+              : null,
+        ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final media = MediaQuery.of(context);
-    final style = btnStyle(media);
+
+    final buttons = buttonOrientation();
+    final padding = PaddingManager.contents(context);
 
     return Scaffold(
       backgroundColor: theme.accentColor,
@@ -230,7 +235,7 @@ class _ContentsState extends State<Contents> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: PaddingManager.contents(context),
+          padding: padding,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -238,44 +243,14 @@ class _ContentsState extends State<Contents> {
                 Text(
                   "Is the word valid?",
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.headline5!.apply(
-                    color: theme.primaryColor,
-                  ),
+                  style: theme.textTheme.headline6,
                 ),
                 Text(
                   widget.gameState.text,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.headline3!.apply(
-                    color: theme.primaryColor,
-                  ),
+                  style: theme.textTheme.headline4,
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    ElevatedButton(
-                      style: style,
-                      onPressed: _stopwatch.isRunning
-                          ? () {
-                              evaluateAnswer(true);
-                            }
-                          : null,
-                      child: Text("CORRECT"),
-                    ),
-                    if (media.orientation == Orientation.portrait)
-                      Divider(
-                        color: Colors.transparent,
-                      ),
-                    OutlinedButton(
-                      style: style,
-                      child: Text("WRONG"),
-                      onPressed: _stopwatch.isRunning
-                          ? () {
-                              evaluateAnswer(false);
-                            }
-                          : null,
-                    ),
-                  ],
-                ),
+                buttons,
               ],
             ),
           ),

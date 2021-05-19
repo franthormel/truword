@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 import 'package:word_game/models/answer.dart';
-import 'package:word_game/constants/enums.dart';
+import 'package:word_game/models/enums.dart';
 import 'package:word_game/models/evaluation.dart';
 import 'package:word_game/models/game_settings.dart';
 
@@ -14,8 +14,8 @@ void main() {
       expect(eval.correct, 0);
       expect(eval.wrong, 0);
       expect(eval.total, 0);
-      expect(eval.percentCorrect, 0);
-      expect(eval.percentCorrectString(), "0%");
+      expect(eval.percentage, 0);
+      expect(eval.percentageText(), "0%");
     });
   });
 

@@ -1,5 +1,5 @@
-import '../constants/enums.dart';
-import '../constants/timer.dart';
+import 'enums.dart';
+import 'timer.dart';
 
 class GameSettings {
   final TimeLimit timeLimit;
@@ -14,6 +14,13 @@ class GameSettings {
   ///Returns remaining seconds based on [seconds] that is not greater than seconds per minute
   int get secondsRemainder =>
       timeLimitSeconds[timeLimit]! % Duration.secondsPerMinute;
+
+  ///Display Results (TimeLimit.value) as text
+  ///
+  ///* TimeLimit.Long = 'Results (Long)'
+  ///* TimeLimit.Regular = 'Results (Regular)'
+  ///* TimeLimit.Quick = 'Results (Quick)'
+  String resultsText() => "Results (${timeLimitText()})";
 
   ///Display [TimeLimit] in mm:ss format
   ///
@@ -52,26 +59,19 @@ class GameSettings {
   String timeLimitText() {
     String value;
 
-    //Didn't use the describeEnum() since it returns a small case for the first character
-    if (timeLimit == TimeLimit.long) {
-      value = "Long";
-    } else if (timeLimit == TimeLimit.regular) {
-      value = "Regular";
-    } else if (timeLimit == TimeLimit.quick) {
-      value = "Quick";
-    } else {
-      throw ArgumentError("Time limit is not defined");
+    switch (timeLimit) {
+      case TimeLimit.long:
+        value = "Long";
+        break;
+      case TimeLimit.regular:
+        value = "Regular";
+        break;
+      case TimeLimit.quick:
+        value = "Quick";
+        break;
+      default:
+        throw ArgumentError("Time limit is not defined!");
     }
-
     return value;
-  }
-
-  ///Display Results (TimeLimit.value) as text
-  ///
-  ///* TimeLimit.Long = 'Results (Long)'
-  ///* TimeLimit.Regular = 'Results (Regular)'
-  ///* TimeLimit.Quick = 'Results (Quick)'
-  String resultsText() {
-    return "Results (${timeLimitText()})";
   }
 }

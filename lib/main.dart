@@ -4,7 +4,9 @@ import 'screens/home.dart';
 import 'theme.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,6 +15,7 @@ class MyApp extends StatelessWidget {
     final theme = buildTheme();
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: theme,
       home: Homepage(),
     );

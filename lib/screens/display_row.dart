@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../manager/padding.dart';
 
 class DialogRow extends StatelessWidget {
+  final Function? callback;
   final String textLeft;
   final String textRight;
-  final Function? callback;
 
   const DialogRow({
+    this.callback,
     required this.textLeft,
     required this.textRight,
-    this.callback,
   });
 
   @override

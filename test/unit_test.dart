@@ -30,7 +30,7 @@ void main() {
       expect(settings.secondsRemainder, 0);
       expect(settings.timeLimitText(), "Long");
       expect(settings.timeLimitFormat(), "2:00");
-      expect(settings.resultsText(), "Results (Long)");
+      expect(settings.results(), "Results (Long)");
     });
 
     //TimeLimit.Regular: 60
@@ -43,7 +43,7 @@ void main() {
       expect(settings.secondsRemainder, 0);
       expect(settings.timeLimitText(), "Regular");
       expect(settings.timeLimitFormat(), "1:00");
-      expect(settings.resultsText(), "Results (Regular)");
+      expect(settings.results(), "Results (Regular)");
     });
 
     //TimeLimit.Quick : 30
@@ -56,7 +56,7 @@ void main() {
       expect(settings.secondsRemainder, 30);
       expect(settings.timeLimitText(), "Quick");
       expect(settings.timeLimitFormat(), "0:30");
-      expect(settings.resultsText(), "Results (Quick)");
+      expect(settings.results(), "Results (Quick)");
     });
   });
 }

@@ -14,7 +14,7 @@ class PaddingManager {
 
   //Display is 411 x 683
   //Vertical is 411 * _kWidthRow = 8.22
-  static EdgeInsets minWidthPad(BuildContext context) => _paddingHorizontal(
+  static EdgeInsets minWidthPad(BuildContext context) => _horizontal(
         context: context,
         kHeightFactor: _kWidthHome,
       );
@@ -22,7 +22,7 @@ class PaddingManager {
   //Display is 411 x 683
   //Vertical is 411 * _kWidth = 8.22
   //Horizontal is 683 * _kHeight = 27.32
-  static EdgeInsets home(BuildContext context) => _paddingSymmetric(
+  static EdgeInsets home(BuildContext context) => _symmetric(
         context: context,
         kHeightFactor: _kHeightHome,
         kWidthFactor: _kWidthHome,
@@ -32,13 +32,13 @@ class PaddingManager {
   //Vertical is 411 * .02 = 8.22
   //Horizontal is 683 * .04 = 27.32
   ///Returns symmetric [EdgeInsets]
-  static EdgeInsets contents(BuildContext context) => _paddingSymmetric(
+  static EdgeInsets contents(BuildContext context) => _symmetric(
         context: context,
         kHeightFactor: _kHeightGame,
         kWidthFactor: _kWidthGame,
       );
 
-  static EdgeInsets _paddingSymmetric({
+  static EdgeInsets _symmetric({
     required BuildContext context,
     required double kWidthFactor,
     required double kHeightFactor,
@@ -53,7 +53,7 @@ class PaddingManager {
     );
   }
 
-  static EdgeInsets _paddingHorizontal({
+  static EdgeInsets _horizontal({
     required BuildContext context,
     required double kHeightFactor,
   }) {

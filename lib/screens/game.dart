@@ -7,66 +7,82 @@ import '../manager/size.dart';
 import '../models/game_state.dart';
 import 'display_row.dart';
 
-class Contents extends StatefulWidget {
+class WordGame extends StatefulWidget {
   final GameState gameState;
 
-  Contents(this.gameState);
+  const WordGame(this.gameState);
 
   @override
-  _ContentsState createState() => _ContentsState();
+  _WordGameState createState() => _WordGameState();
 }
 
-class _ContentsState extends State<Contents> {
-  late Stopwatch _stopwatch;
-  late Timer _timer;
-
-  ///If [isReplay] is set to true initialize [Stopwatch] otherwise
-  ///reset [GameState]
-  void startGame({bool isReplay = false}) {
-    if (isReplay) {
-      widget.gameState.reset();
-      Navigator.pop(context);
-    } else {
-      _stopwatch = Stopwatch();
-    }
-
-    _stopwatch.start();
-
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_stopwatch.isRunning && widget.gameState.enoughTimeLeft) {
-        setState(() {
-          widget.gameState.reduceTime();
-        });
-      }
-
-      //Stopwatch has hit the set time limit
-      if (!widget.gameState.enoughTimeLeft) {
-        //Stop the timer and stopwatch
-        _stopwatch.stop();
-        timer.cancel();
-
-        //Display popup
-        evaluateGame();
-      }
-    });
-  }
+class _WordGameState extends State<WordGame> {
+  late Stopwatch stopwatch;
+  late Timer timer;
 
   @override
   void initState() {
     super.initState();
-    startGame();
+    start();
   }
 
   @override
   void dispose() {
-    _stopwatch.stop();
-    _timer.cancel();
+    stopwatch.stop();
+    timer.cancel();
     super.dispose();
   }
 
-  ///Display an undismissable dialog and showing the
-  ///the game evaluation
-  void evaluateGame() {
+  ///Add the user answer to [GameState]'s list of answers
+  ///and generate new [EnglishWord]
+  void answer(bool answer) {
+    widget.gameState.addAnswer(answer);
+
+    setState(() {
+      widget.gameState.resetWord();
+    });
+  }
+
+  ///Returns a [Column] of [Button]s
+  Widget buttons() {
+    final media = MediaQuery.of(context);
+    final style = ButtonStyle(
+      minimumSize:
+      MaterialStateProperty.all<Size>(SizeManager.game(media.size)),
+      textStyle: MaterialStateProperty.all<TextStyle>(
+          Theme.of(context).textTheme.headline5!),
+    );
+
+    return Column(
+      children: <Widget>[
+        ElevatedButton(
+          style: style,
+          onPressed: stopwatch.isRunning
+              ? () {
+            answer(true);
+          }
+              : null,
+          child: Text("CORRECT"),
+        ),
+        if (media.orientation == Orientation.portrait)
+          Divider(
+            color: Colors.transparent,
+          ),
+        OutlinedButton(
+          style: style,
+          child: Text("WRONG"),
+          onPressed: stopwatch.isRunning
+              ? () {
+            answer(false);
+          }
+              : null,
+        ),
+      ],
+    );
+  }
+
+  ///Display an non-dismissible dialog showing the evaluation
+  void end() {
     final eval = widget.gameState.evaluateAnswers;
 
     showDialog(
@@ -74,12 +90,15 @@ class _ContentsState extends State<Contents> {
       barrierDismissible: false,
       builder: (context) {
         final theme = Theme.of(context);
+        final style = ButtonStyle(
+          textStyle: MaterialStateProperty.all<TextStyle>(theme.textTheme.headline5!),
+        );
 
         return WillPopScope(
           onWillPop: () async => false,
           child: SimpleDialog(
             title: Text(
-              widget.gameState.settings.resultsText(),
+              widget.gameState.settings.results(),
               textAlign: TextAlign.center,
             ),
             children: [
@@ -111,15 +130,17 @@ class _ContentsState extends State<Contents> {
                 child: Column(
                   children: [
                     ElevatedButton.icon(
-                      label: Text("REPLAY"),
                       icon: Icon(Icons.replay),
+                      label: Text("REPLAY"),
+                      style: style,
                       onPressed: () {
-                        startGame(isReplay: true);
+                        start(isReplay: true);
                       },
                     ),
                     TextButton.icon(
-                      label: Text("Home"),
                       icon: Icon(Icons.home),
+                      label: Text("Home"),
+                      style: style,
                       onPressed: () {
                         Navigator.of(context, rootNavigator: true)
                             .popUntil((route) => route.isFirst);
@@ -135,26 +156,21 @@ class _ContentsState extends State<Contents> {
     );
   }
 
-  ///Add the user answer to [GameState]'s list of answers
-  ///and generate new [EnglishWord]
-  void evaluateAnswer(bool answer) {
-    widget.gameState.addAnswer(answer);
-
-    setState(() {
-      widget.gameState.resetWord();
-    });
-  }
-
   ///Display an undismissable dialog after pause
   ///button is pressed
-  void pauseScreen() {
-    if (widget.gameState.timeLimitPausable && _stopwatch.isRunning) {
-      _stopwatch.stop();
+  void pause() {
+    if (widget.gameState.canPause && stopwatch.isRunning) {
+      stopwatch.stop();
 
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
+          final style = ButtonStyle(
+            textStyle: MaterialStateProperty.all<TextStyle>(
+                Theme.of(context).textTheme.headline5!),
+          );
+
           return WillPopScope(
             onWillPop: () async => false,
             child: SimpleDialog(
@@ -162,11 +178,12 @@ class _ContentsState extends State<Contents> {
                 SimpleDialogOption(
                   child: ElevatedButton.icon(
                     icon: Icon(Icons.play_arrow),
+                    style: style,
                     label: Text("Resume"),
                     onPressed: () {
-                      if (!_stopwatch.isRunning) {
+                      if (!stopwatch.isRunning) {
                         Navigator.pop(context);
-                        _stopwatch.start();
+                        stopwatch.start();
                       }
                     },
                   ),
@@ -179,47 +196,41 @@ class _ContentsState extends State<Contents> {
     }
   }
 
-  Widget buttonOrientation() {
-    final media = MediaQuery.of(context);
-    final style = ButtonStyle(
-      minimumSize:
-          MaterialStateProperty.all<Size>(SizeManager.game(media.size)),
-    );
+  ///If [isReplay] is set to true initialize [Stopwatch] otherwise
+  ///reset [GameState]
+  void start({bool isReplay = false}) {
+    if (isReplay) {
+      widget.gameState.reset();
+      Navigator.pop(context);
+    } else {
+      stopwatch = Stopwatch();
+    }
 
-    return Column(
-      children: <Widget>[
-        ElevatedButton(
-          style: style,
-          onPressed: _stopwatch.isRunning
-              ? () {
-                  evaluateAnswer(true);
-                }
-              : null,
-          child: Text("CORRECT"),
-        ),
-        if (media.orientation == Orientation.portrait)
-          Divider(
-            color: Colors.transparent,
-          ),
-        OutlinedButton(
-          style: style,
-          child: Text("WRONG"),
-          onPressed: _stopwatch.isRunning
-              ? () {
-                  evaluateAnswer(false);
-                }
-              : null,
-        ),
-      ],
-    );
+    stopwatch.start();
+
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (stopwatch.isRunning && widget.gameState.enoughTimeLeft) {
+        setState(() {
+          widget.gameState.reduceTime();
+        });
+      }
+
+      //Stopwatch has hit the set time limit
+      if (!widget.gameState.enoughTimeLeft) {
+        //Stop the timer and stopwatch
+        stopwatch.stop();
+        timer.cancel();
+
+        //Display popup
+        end();
+      }
+    });
   }
-
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    final buttons = buttonOrientation();
+    final controls = buttons();
     final padding = PaddingManager.contents(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
       backgroundColor: theme.accentColor,
@@ -227,7 +238,7 @@ class _ContentsState extends State<Contents> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.pause),
-            onPressed: _stopwatch.isRunning ? pauseScreen : null,
+            onPressed: stopwatch.isRunning ? pause : null,
           ),
         ],
         centerTitle: true,
@@ -248,9 +259,9 @@ class _ContentsState extends State<Contents> {
                 Text(
                   widget.gameState.text,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.headline4,
+                  style: theme.textTheme.headline3,
                 ),
-                buttons,
+                controls,
               ],
             ),
           ),

@@ -1,5 +1,4 @@
 import 'enums.dart';
-import 'timer.dart';
 
 class GameSettings {
   final TimeLimit timeLimit;
@@ -20,7 +19,7 @@ class GameSettings {
   ///* TimeLimit.Long = 'Results (Long)'
   ///* TimeLimit.Regular = 'Results (Regular)'
   ///* TimeLimit.Quick = 'Results (Quick)'
-  String resultsText() => "Results (${timeLimitText()})";
+  String results() => "Results (${timeLimitText()})";
 
   ///Display [TimeLimit] in mm:ss format
   ///

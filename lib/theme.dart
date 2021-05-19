@@ -87,8 +87,8 @@ TextStyle _buildButtonTextStyle() {
 TextTheme _buildTextThemeBase(TextTheme base) {
   return base
       .copyWith(
-        headline4: base.headline4!.copyWith(
-          fontWeight: FontWeight.w500,
+        headline3: base.headline3!.copyWith(
+          fontWeight: FontWeight.w700,
         ),
       )
       .apply(

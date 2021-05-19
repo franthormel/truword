@@ -37,7 +37,7 @@ class GameState {
       _remainingSeconds > 0 ? "$_remainingSeconds s" : "";
 
   ///Returns true if there is att least 2 seconds left for timer
-  bool get timeLimitPausable => _remainingSeconds > 1;
+  bool get canPause => _remainingSeconds > 1;
 
   ///Returns an [Evaluation] of the [List<Answer>]
   Evaluation get evaluateAnswers => Evaluation(answers: _answers);

@@ -25,13 +25,11 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
-
-    final styleText = theme.textTheme.headline5;
-
-    final sizeLogo = SizeManager.logo(size);
-    final sizeHome = SizeManager.home(size);
     final padding = PaddingManager.home(context);
+    final size = MediaQuery.of(context).size;
+    final styleText = theme.textTheme.headline5;
+    final sizeHome = SizeManager.home(size);
+    final sizeLogo = SizeManager.logo(size);
 
     return Scaffold(
       backgroundColor: theme.accentColor,

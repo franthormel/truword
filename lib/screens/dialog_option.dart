@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import '../models/enums.dart';
 import '../models/game_settings.dart';
 import '../models/game_state.dart';
-import 'contents.dart';
+import 'game.dart';
 import 'display_row.dart';
 
 class TimerDialogOption extends StatelessWidget {
-  final TimeLimit timeLimit;
   final BuildContext dialogContext;
+  final TimeLimit timeLimit;
 
   TimerDialogOption({
     Key? key,
@@ -27,7 +27,7 @@ class TimerDialogOption extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Contents(GameState(settings: settings)),
+          builder: (context) => WordGame(GameState(settings: settings)),
         ),
       );
     };

@@ -7,6 +7,24 @@ This project is also available through
 - [Google Play](https://play.google.com/store/apps/details?id=com.franca.game.truword)
 - [Behance](https://www.behance.net/denmind)
 
+## Screenshots
+
+### Home
+<img src="https://raw.githubusercontent.com/pendraic/truword/main/docs/home.png" width="400"/>
+
+### Select timer
+<img src="https://raw.githubusercontent.com/pendraic/truword/main/docs/timer.png" width="400"/>
+
+### In-game
+<img src="https://raw.githubusercontent.com/pendraic/truword/main/docs/word_true.png" width="400"/>
+<img src="https://raw.githubusercontent.com/pendraic/truword/main/docs/word_false.png" width="400"/>
+
+### In-game pause screen
+<img src="https://raw.githubusercontent.com/pendraic/truword/main/docs/pause.png" width="400"/>
+
+### Evaluation of answers
+<img src="https://raw.githubusercontent.com/pendraic/truword/main/docs/evaluation.png" width="400"/>
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

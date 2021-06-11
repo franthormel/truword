@@ -1,6 +1,11 @@
 # Truword
 
-Flutter game for checking if the word is valid or not.
+Flutter game for checking if the text displayed is a valid English word or not.
+
+This project is also available through 
+
+- [Google Play](https://play.google.com/store/apps/details?id=com.franca.game.truword)
+- [Behance](https://www.behance.net/denmind)
 
 ## Getting Started
 

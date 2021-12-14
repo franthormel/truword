@@ -8,18 +8,19 @@ class DialogRow extends StatelessWidget {
   final String textRight;
 
   const DialogRow({
+    Key? key,
     this.callback,
     required this.textLeft,
     required this.textRight,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final btnTextStyle = theme.textTheme.headline5;
+    final size = MediaQuery.of(context).size;
 
     return Padding(
-      padding: PaddingManager.minWidthPad(context),
+      padding: PaddingManager.minWidthPad(size),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -27,11 +28,12 @@ class DialogRow extends StatelessWidget {
             onPressed: callback as void Function()? ?? () {},
             child: Text(textRight),
             style: ButtonStyle(
-              textStyle: MaterialStateProperty.all<TextStyle>(btnTextStyle!),
+              textStyle: MaterialStateProperty.all<TextStyle>(
+                  theme.textTheme.headline5!),
               foregroundColor:
-              MaterialStateProperty.all<Color>(theme.colorScheme.secondary),
+                  MaterialStateProperty.all<Color>(theme.colorScheme.secondary),
               backgroundColor:
-              MaterialStateProperty.all<Color>(theme.primaryColor),
+                  MaterialStateProperty.all<Color>(theme.primaryColor),
             ),
           ),
           Text(

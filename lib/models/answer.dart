@@ -9,6 +9,5 @@ class Answer {
     required this.answer,
   });
 
-  ///Return true if both user and [EnglishWord]'s validity is the same
   bool get correct => answer == word.valid;
 }

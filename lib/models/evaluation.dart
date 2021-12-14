@@ -1,5 +1,6 @@
 import 'answer.dart';
 
+// TODO Tests
 class Evaluation {
   final List<Answer> answers;
 
@@ -19,23 +20,19 @@ class Evaluation {
     }
   }
 
-  ///Calculate the wrong answers by subtracting [correct] from [total]
   int get wrong => total - correct;
 
-  ///Returns [double] as percentage between [correct] over [total]
-  ///
-  /// If resulting value is invalid returns 0
-  double get percentage {
+  double get percentageCorrect {
     final value = (correct / total) * 100;
 
     return value.isNaN || value.isInfinite || value <= 0 ? 0 : value;
   }
 
-  ///Returns [String] format of [percentage]
+  ///Returns [String] format of [percentageCorrect]
   ///
-  ///[percentage] with decimal values are rounded to one (1) decimal place.
-  String percentageText() {
-    final percent = percentage;
+  ///[percentageCorrect] with decimal values are rounded to one (1) decimal place.
+  String get percentageText {
+    final percent = percentageCorrect;
 
     return percent % 1 == 0
         ? "${percent.toStringAsFixed(0)}%"

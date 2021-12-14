@@ -10,10 +10,12 @@ class EnglishWord {
   EnglishWord() {
     final random = Random();
 
-    this.valid = random.nextBool();
+    valid = random.nextBool();
 
-    this.text = this.valid
+    text = valid
         ? wordsTrue[random.nextInt(wordsTrue.length)]
         : wordsFalse[random.nextInt(wordsFalse.length)];
   }
+
+  EnglishWord.custom({required this.text, required this.valid});
 }

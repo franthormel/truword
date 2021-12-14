@@ -7,22 +7,23 @@ const double kBorderWidth = 2;
 
 ThemeData buildTheme() {
   final base = ThemeData.light();
+  
   return base.copyWith(
     primaryColor: kSwatchPrimary,
     colorScheme: base.colorScheme.copyWith(
       secondary: Colors.white,
     ),
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       foregroundColor: kSwatchPrimary,
       backgroundColor: Colors.white,
     ),
     dialogTheme: DialogTheme(
       backgroundColor: Colors.white,
-      contentTextStyle: TextStyle(
+      contentTextStyle: const TextStyle(
         color: kSwatchPrimary,
       ),
       shape: RoundedRectangleBorder(
-        side: BorderSide(
+        side: const BorderSide(
           color: kSwatchPrimary,
           width: kBorderWidth,
         ),
@@ -38,7 +39,7 @@ ThemeData buildTheme() {
         ),
       ),
     ),
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: kSwatchPrimary,
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
@@ -46,7 +47,7 @@ ThemeData buildTheme() {
         foregroundColor: MaterialStateProperty.all<Color>(kSwatchPrimary),
         backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
         side: MaterialStateProperty.all<BorderSide>(
-          BorderSide(
+          const BorderSide(
             width: kBorderWidth,
             color: kSwatchPrimary,
           ),
@@ -77,7 +78,7 @@ ThemeData buildTheme() {
 }
 
 TextStyle _buildButtonTextStyle() {
-  return TextStyle(
+  return const TextStyle(
     fontWeight: FontWeight.w500,
   );
 }

@@ -3,6 +3,7 @@ import 'english_word.dart';
 import 'evaluation.dart';
 import 'game_settings.dart';
 
+// TODO Tests
 class GameState {
   final GameSettings settings;
   final List<Answer> _answers;
@@ -12,7 +13,7 @@ class GameState {
 
   GameState({
     required this.settings,
-  })   : _answers = <Answer>[],
+  })  : _answers = <Answer>[],
         _word = EnglishWord(),
         _remainingSeconds = settings.seconds;
 
@@ -59,13 +60,13 @@ class GameState {
 
   ///Resets properties
   void reset() {
-    resetWord();
+    regenerateWord();
     _remainingSeconds = settings.seconds;
     _answers.clear();
   }
 
   ///Reset [EnglishWord] by calling its randomize() method
-  void resetWord() {
+  void regenerateWord() {
     _word = EnglishWord();
   }
 }

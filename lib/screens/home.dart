@@ -6,7 +6,8 @@ import '../models/enums.dart';
 import 'dialog_option.dart';
 
 class Homepage extends StatelessWidget {
-  ///Returns [List] of [TimeLimit] as dialog options
+  const Homepage({Key? key}) : super(key: key);
+
   List<Widget> options(BuildContext context) {
     final options = <Widget>[];
 
@@ -25,13 +26,13 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final padding = PaddingManager.home(context);
-    final size = MediaQuery
-        .of(context)
-        .size;
-    final styleText = theme.textTheme.headline5;
+    final size = MediaQuery.of(context).size;
+
+    final padding = PaddingManager.home(size);
     final sizeHome = SizeManager.home(size);
     final sizeLogo = SizeManager.logo(size);
+
+    final styleText = theme.textTheme.headline5;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.secondary,
@@ -40,7 +41,7 @@ class Homepage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Flexible(
+            const Flexible(
               child: FractionallySizedBox(
                 heightFactor: .1,
               ),
@@ -84,7 +85,7 @@ class Homepage extends StatelessWidget {
                     },
                   );
                 },
-                child: Text("START"),
+                child: const Text("START"),
               ),
             ),
           ],

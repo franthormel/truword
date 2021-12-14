@@ -14,15 +14,14 @@ void main() {
       expect(eval.correct, 0);
       expect(eval.wrong, 0);
       expect(eval.total, 0);
-      expect(eval.percentage, 0);
-      expect(eval.percentageText(), "0%");
+      expect(eval.percentageCorrect, 0);
+      expect(eval.percentageText, "0%");
     });
   });
 
   group("Models.GameSettings", () {
-    //TimeLimit.Long : 120
     test("Time limit set to long", () {
-      final settings = GameSettings(
+      const settings = GameSettings(
         timeLimit: TimeLimit.long,
       );
 
@@ -30,12 +29,11 @@ void main() {
       expect(settings.secondsRemainder, 0);
       expect(settings.timeLimitText(), "Long");
       expect(settings.timeLimitFormat(), "2:00");
-      expect(settings.results(), "Results (Long)");
+      expect(settings.results, "Results (Long)");
     });
 
-    //TimeLimit.Regular: 60
     test("Time limit set to regular", () {
-      final settings = GameSettings(
+      const settings = GameSettings(
         timeLimit: TimeLimit.regular,
       );
 
@@ -43,12 +41,11 @@ void main() {
       expect(settings.secondsRemainder, 0);
       expect(settings.timeLimitText(), "Regular");
       expect(settings.timeLimitFormat(), "1:00");
-      expect(settings.results(), "Results (Regular)");
+      expect(settings.results, "Results (Regular)");
     });
 
-    //TimeLimit.Quick : 30
     test("Time limit set to quick", () {
-      final settings = GameSettings(
+      const settings = GameSettings(
         timeLimit: TimeLimit.quick,
       );
 
@@ -56,7 +53,7 @@ void main() {
       expect(settings.secondsRemainder, 30);
       expect(settings.timeLimitText(), "Quick");
       expect(settings.timeLimitFormat(), "0:30");
-      expect(settings.results(), "Results (Quick)");
+      expect(settings.results, "Results (Quick)");
     });
   });
 }

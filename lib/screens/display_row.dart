@@ -29,7 +29,7 @@ class DialogRow extends StatelessWidget {
             style: ButtonStyle(
               textStyle: MaterialStateProperty.all<TextStyle>(btnTextStyle!),
               foregroundColor:
-              MaterialStateProperty.all<Color>(theme.accentColor),
+              MaterialStateProperty.all<Color>(theme.colorScheme.secondary),
               backgroundColor:
               MaterialStateProperty.all<Color>(theme.primaryColor),
             ),

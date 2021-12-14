@@ -241,7 +241,7 @@ class _WordGameState extends State<WordGame> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.accentColor,
+      backgroundColor: theme.colorScheme.secondary,
       appBar: AppBar(
         actions: <Widget>[
           IconButton(

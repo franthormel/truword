@@ -34,7 +34,7 @@ class Homepage extends StatelessWidget {
     final sizeLogo = SizeManager.logo(size);
 
     return Scaffold(
-      backgroundColor: theme.accentColor,
+      backgroundColor: theme.colorScheme.secondary,
       body: Padding(
         padding: padding,
         child: Column(

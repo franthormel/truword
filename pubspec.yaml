@@ -1,5 +1,5 @@
 name: word_game
-description: A new Flutter application.
+description: Flutter game for the vocabulary with English words.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.

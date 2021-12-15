@@ -3,70 +3,65 @@ import 'english_word.dart';
 import 'evaluation.dart';
 import 'game_settings.dart';
 
-// TODO Tests
 class GameState {
   final GameSettings settings;
-  final List<Answer> _answers;
+  final List<Answer> _answers = <Answer>[];
 
-  EnglishWord _word;
+  EnglishWord _word = EnglishWord();
   int _remainingSeconds;
 
-  GameState({
-    required this.settings,
-  })  : _answers = <Answer>[],
-        _word = EnglishWord(),
-        _remainingSeconds = settings.seconds;
+  GameState(
+    this.settings,
+  ) : _remainingSeconds = settings.seconds;
 
-  ///Returns true if there is still at least 1 seconds left for the timer
+  /// Returns true if there is at least two (2) seconds left
+  bool get canPause => _remainingSeconds > 1;
+
   bool get enoughTimeLeft => _remainingSeconds > 0;
 
-  ///Returns the remaining seconds
+  Evaluation get evaluateAnswers => Evaluation(_answers);
+
   int get remainingSeconds => _remainingSeconds;
 
-  ///Returns the current text of [EnglishWord]
+  /// Returns the text of [EnglishWord]
   String get text => _word.text;
 
-  ///Returns [String] for remaining seconds in timer format
+  /// Returns [String] for remaining seconds in timer format
   ///
   /// If remaining seconds is 0 (or less) returns empty [String]
   ///
-  ///Example:
+  /// Example:
   ///* If remaining seconds is 60, return '60 s'
   ///* If remaining seconds is 0, return ''
   ///* If remaining seconds is -1, return ''
   String get textRemainingSeconds =>
       _remainingSeconds > 0 ? "$_remainingSeconds s" : "";
 
-  ///Returns true if there is att least 2 seconds left for timer
-  bool get canPause => _remainingSeconds > 1;
-
-  ///Returns an [Evaluation] of the [List<Answer>]
-  Evaluation get evaluateAnswers => Evaluation(answers: _answers);
-
-  ///Add user answer along with the current [EnglishWord] to list
-  void addAnswer(bool answer) {
-    _answers.add(
-      Answer(
-        word: _word,
-        answer: answer,
-      ),
+  void addAnswer(bool value) {
+    final answer = Answer(
+      word: _word,
+      answer: value,
     );
+
+    _answers.add(answer);
   }
 
-  ///Decrements the remaining seconds by 1
+  /// Reduce timer by one (1) second.
   void reduceTime() {
     _remainingSeconds--;
   }
 
-  ///Resets properties
+  /// Reset [EnglishWord] by calling its randomize() method
+  void replaceWord() {
+    _word = EnglishWord();
+  }
+
+  /// Replaces [EnglishWord] with a new one, sets
+  /// [remainingSeconds] back to initial value and
+  /// clears user's previous answers.
   void reset() {
     replaceWord();
     _remainingSeconds = settings.seconds;
     _answers.clear();
-  }
-
-  ///Reset [EnglishWord] by calling its randomize() method
-  void replaceWord() {
-    _word = EnglishWord();
   }
 }

@@ -1,16 +1,11 @@
 import 'answer.dart';
 
-// TODO Tests
 class Evaluation {
   final List<Answer> answers;
 
-  late int total;
   late int correct;
 
-  Evaluation({
-    required this.answers,
-  }) {
-    total = answers.length;
+  Evaluation(this.answers) {
     correct = 0;
 
     for (Answer answer in answers) {
@@ -20,22 +15,28 @@ class Evaluation {
     }
   }
 
+  double get _percentageCorrect {
+    double value = 0;
+
+    if (correct > 0) {
+      final percent = correct / total;
+
+      value = percent * 100;
+    }
+    
+    return value;
+  }
+
+  String get percentCorrectText {
+    final percentage = _percentageCorrect;
+    final percentIsAWholeNumber = percentage % 1 == 0;
+
+    return percentIsAWholeNumber
+        ? "${percentage.toStringAsFixed(0)}%"
+        : "${percentage.toStringAsFixed(1)}%";
+  }
+
+  int get total => answers.length;
+
   int get wrong => total - correct;
-
-  double get percentageCorrect {
-    final value = (correct / total) * 100;
-
-    return value.isNaN || value.isInfinite || value <= 0 ? 0 : value;
-  }
-
-  ///Returns [String] format of [percentageCorrect]
-  ///
-  ///[percentageCorrect] with decimal values are rounded to one (1) decimal place.
-  String get percentageText {
-    final percent = percentageCorrect;
-
-    return percent % 1 == 0
-        ? "${percent.toStringAsFixed(0)}%"
-        : "${percent.toStringAsFixed(1)}%";
-  }
 }

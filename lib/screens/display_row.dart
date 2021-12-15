@@ -25,7 +25,7 @@ class DialogRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ElevatedButton(
-            onPressed: callback ?? () {},
+            onPressed: callback,
             child: Text(textRight),
             style: ButtonStyle(
               textStyle: MaterialStateProperty.all<TextStyle>(

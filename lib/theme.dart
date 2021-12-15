@@ -7,7 +7,7 @@ const double kBorderWidth = 2;
 
 ThemeData buildTheme() {
   final base = ThemeData.light();
-  
+
   return base.copyWith(
     primaryColor: kSwatchPrimary,
     colorScheme: base.colorScheme.copyWith(

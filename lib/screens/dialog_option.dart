@@ -16,11 +16,7 @@ class TimerDialogOption extends StatelessWidget {
     required this.timeLimit,
   }) : super(key: key);
 
-  GameSettings get settings => GameSettings(timeLimit: timeLimit);
-
-  String get settingsTextLeft => settings.timeLimitText();
-
-  String get settingsTextRight => settings.timeLimitFormat();
+  GameSettings get settings => GameSettings(timeLimit);
 
   void closeSettingsThenShowGame(BuildContext context) {
     Navigator.of(dialogContext, rootNavigator: true).pop();
@@ -28,8 +24,7 @@ class TimerDialogOption extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            WordGame(gameState: GameState(settings: settings)),
+        builder: (context) => WordGame(gameState: GameState(settings)),
       ),
     );
   }
@@ -44,8 +39,8 @@ class TimerDialogOption extends StatelessWidget {
         callback: () {
           closeSettingsThenShowGame(context);
         },
-        textLeft: settingsTextLeft,
-        textRight: settingsTextRight,
+        textLeft: settings.timeLimitText,
+        textRight: settings.timeLimitFormat,
       ),
     );
   }

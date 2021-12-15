@@ -92,7 +92,7 @@ class _WordGameState extends State<WordGame> {
             ),
             children: [
               Text(
-                eval.percentageText,
+                eval.percentCorrectText,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.headline2,
               ),

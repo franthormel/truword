@@ -33,8 +33,6 @@ class _WordGameState extends State<WordGame> {
     super.dispose();
   }
 
-  ///Add the user answer to [GameState]'s list of answers
-  ///and generate new [EnglishWord]
   void answer(bool answer) {
     widget.gameState.addAnswer(answer);
 
@@ -43,12 +41,11 @@ class _WordGameState extends State<WordGame> {
     });
   }
 
-  ///Returns a [Column] of [Button]s
   Widget buttons() {
     final media = MediaQuery.of(context);
     final style = ButtonStyle(
       minimumSize:
-          MaterialStateProperty.all<Size>(SizeManager.game(media.size)),
+      MaterialStateProperty.all<Size>(SizeManager.game(media.size)),
       textStyle: MaterialStateProperty.all<TextStyle>(
           Theme.of(context).textTheme.headline5!),
     );
@@ -59,8 +56,8 @@ class _WordGameState extends State<WordGame> {
           style: style,
           onPressed: stopwatch.isRunning
               ? () {
-                  answer(true);
-                }
+            answer(true);
+          }
               : null,
           child: const Text("CORRECT"),
         ),
@@ -73,15 +70,14 @@ class _WordGameState extends State<WordGame> {
           child: const Text("WRONG"),
           onPressed: stopwatch.isRunning
               ? () {
-                  answer(false);
-                }
+            answer(false);
+          }
               : null,
         ),
       ],
     );
   }
 
-  ///Display an non-dismissible dialog showing the evaluation
   void end() {
     final eval = widget.gameState.evaluateAnswers;
 
@@ -92,7 +88,7 @@ class _WordGameState extends State<WordGame> {
         final theme = Theme.of(context);
         final style = ButtonStyle(
           textStyle:
-              MaterialStateProperty.all<TextStyle>(theme.textTheme.headline5!),
+          MaterialStateProperty.all<TextStyle>(theme.textTheme.headline5!),
         );
 
         return WillPopScope(
@@ -157,8 +153,6 @@ class _WordGameState extends State<WordGame> {
     );
   }
 
-  ///Display an undismissable dialog after pause
-  ///button is pressed
   void pause() {
     if (widget.gameState.canPause && stopwatch.isRunning) {
       stopwatch.stop();
@@ -197,8 +191,6 @@ class _WordGameState extends State<WordGame> {
     }
   }
 
-  ///If [isReplay] is set to true initialize [Stopwatch] otherwise
-  ///reset [GameState]
   void start({bool isReplay = false}) {
     if (isReplay) {
       widget.gameState.reset();

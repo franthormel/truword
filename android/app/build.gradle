@@ -43,9 +43,9 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.denmind.game.truword"
+        applicationId "com.franca.game.truword"
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

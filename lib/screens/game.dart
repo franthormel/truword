@@ -17,68 +17,60 @@ class WordGame extends StatefulWidget {
 }
 
 class _WordGameState extends State<WordGame> {
-  late Stopwatch stopwatch;
+  final stopwatch = Stopwatch();
   late Timer timer;
+
+  String get remainingSeconds => widget.gameState.textRemainingSeconds;
 
   @override
   void initState() {
     super.initState();
-    start();
+    startGame();
   }
 
   @override
   void dispose() {
-    stopwatch.stop();
-    timer.cancel();
+    disposeTimers();
     super.dispose();
   }
 
-  void answer(bool answer) {
-    widget.gameState.addAnswer(answer);
+  bool get gameCanBePaused => widget.gameState.canPause && stopwatch.isRunning;
 
+  bool get gameIsPlayable =>
+      stopwatch.isRunning && widget.gameState.enoughTimeLeft;
+
+  bool get notEnoughTimeLeft => !widget.gameState.enoughTimeLeft;
+
+  void answer(bool value) {
+    widget.gameState.addAnswer(value);
+    replaceWord();
+  }
+
+  void disposeTimers() {
+    stopwatch.stop();
+    timer.cancel();
+  }
+
+  void replaceWord() {
     setState(() {
-      widget.gameState.regenerateWord();
+      widget.gameState.replaceWord();
     });
   }
 
-  Widget buttons() {
-    final media = MediaQuery.of(context);
-    final style = ButtonStyle(
-      minimumSize:
-      MaterialStateProperty.all<Size>(SizeManager.game(media.size)),
-      textStyle: MaterialStateProperty.all<TextStyle>(
-          Theme.of(context).textTheme.headline5!),
-    );
+  void runTimer(Timer _) {
+    if (gameIsPlayable) {
+      setState(() {
+        widget.gameState.reduceTime();
+      });
+    }
 
-    return Column(
-      children: <Widget>[
-        ElevatedButton(
-          style: style,
-          onPressed: stopwatch.isRunning
-              ? () {
-            answer(true);
-          }
-              : null,
-          child: const Text("CORRECT"),
-        ),
-        if (media.orientation == Orientation.portrait)
-          const Divider(
-            color: Colors.transparent,
-          ),
-        OutlinedButton(
-          style: style,
-          child: const Text("WRONG"),
-          onPressed: stopwatch.isRunning
-              ? () {
-            answer(false);
-          }
-              : null,
-        ),
-      ],
-    );
+    if (notEnoughTimeLeft) {
+      disposeTimers();
+      endGame();
+    }
   }
 
-  void end() {
+  void endGame() {
     final eval = widget.gameState.evaluateAnswers;
 
     showDialog(
@@ -86,9 +78,9 @@ class _WordGameState extends State<WordGame> {
       barrierDismissible: false,
       builder: (context) {
         final theme = Theme.of(context);
-        final style = ButtonStyle(
-          textStyle:
-          MaterialStateProperty.all<TextStyle>(theme.textTheme.headline5!),
+        final headline5 = theme.textTheme.headline5!;
+        final buttonStyle = ButtonStyle(
+          textStyle: MaterialStateProperty.all<TextStyle>(headline5),
         );
 
         return WillPopScope(
@@ -129,18 +121,18 @@ class _WordGameState extends State<WordGame> {
                     ElevatedButton.icon(
                       icon: const Icon(Icons.replay),
                       label: const Text("REPLAY"),
-                      style: style,
-                      onPressed: () {
-                        start(isReplay: true);
-                      },
+                      style: buttonStyle,
+                      onPressed: replayGame,
                     ),
                     TextButton.icon(
                       icon: const Icon(Icons.home),
                       label: const Text("Home"),
-                      style: style,
+                      style: buttonStyle,
                       onPressed: () {
-                        Navigator.of(context, rootNavigator: true)
-                            .popUntil((route) => route.isFirst);
+                        final navigator =
+                            Navigator.of(context, rootNavigator: true);
+
+                        navigator.popUntil((route) => route.isFirst);
                       },
                     ),
                   ],
@@ -153,17 +145,18 @@ class _WordGameState extends State<WordGame> {
     );
   }
 
-  void pause() {
-    if (widget.gameState.canPause && stopwatch.isRunning) {
+  void pauseGame() {
+    if (gameCanBePaused) {
       stopwatch.stop();
 
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
-          final style = ButtonStyle(
-            textStyle: MaterialStateProperty.all<TextStyle>(
-                Theme.of(context).textTheme.headline5!),
+          final theme = Theme.of(context);
+          final headline5 = theme.textTheme.headline5!;
+          final buttonStyle = ButtonStyle(
+            textStyle: MaterialStateProperty.all<TextStyle>(headline5),
           );
 
           return WillPopScope(
@@ -173,7 +166,7 @@ class _WordGameState extends State<WordGame> {
                 SimpleDialogOption(
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.play_arrow),
-                    style: style,
+                    style: buttonStyle,
                     label: const Text("Resume"),
                     onPressed: () {
                       if (!stopwatch.isRunning) {
@@ -191,41 +184,34 @@ class _WordGameState extends State<WordGame> {
     }
   }
 
-  void start({bool isReplay = false}) {
-    if (isReplay) {
-      widget.gameState.reset();
-      Navigator.pop(context);
-    } else {
-      stopwatch = Stopwatch();
-    }
+  void replayGame() {
+    widget.gameState.reset();
+    Navigator.pop(context);
+    startGame();
+  }
+
+  void startGame() {
+    const interval = Duration(seconds: 1);
 
     stopwatch.start();
 
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (stopwatch.isRunning && widget.gameState.enoughTimeLeft) {
-        setState(() {
-          widget.gameState.reduceTime();
-        });
-      }
-
-      //Stopwatch has hit the set time limit
-      if (!widget.gameState.enoughTimeLeft) {
-        //Stop the timer and stopwatch
-        stopwatch.stop();
-        timer.cancel();
-
-        //Display popup
-        end();
-      }
-    });
+    timer = Timer.periodic(interval, runTimer);
   }
 
   @override
   Widget build(BuildContext context) {
-    final controls = buttons();
-    final size = MediaQuery.of(context).size;
-    final padding = PaddingManager.contents(size);
+    final media = MediaQuery.of(context);
     final theme = Theme.of(context);
+
+    final headline5 = theme.textTheme.headline5!;
+    final size = media.size;
+
+    final gameSize = SizeManager.game(size);
+
+    final buttonStyle = ButtonStyle(
+      minimumSize: MaterialStateProperty.all<Size>(gameSize),
+      textStyle: MaterialStateProperty.all<TextStyle>(headline5),
+    );
 
     return Scaffold(
       backgroundColor: theme.colorScheme.secondary,
@@ -233,15 +219,15 @@ class _WordGameState extends State<WordGame> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.pause),
-            onPressed: stopwatch.isRunning ? pause : null,
+            onPressed: pauseGame,
           ),
         ],
         centerTitle: true,
-        title: Text(widget.gameState.textRemainingSeconds),
+        title: Text(remainingSeconds),
       ),
       body: SafeArea(
         child: Padding(
-          padding: padding,
+          padding: PaddingManager.contents(size),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -256,7 +242,28 @@ class _WordGameState extends State<WordGame> {
                   textAlign: TextAlign.center,
                   style: theme.textTheme.headline3,
                 ),
-                controls,
+                Column(
+                  children: <Widget>[
+                    ElevatedButton(
+                      style: buttonStyle,
+                      onPressed: () {
+                        answer(true);
+                      },
+                      child: const Text("CORRECT"),
+                    ),
+                    if (media.orientation == Orientation.portrait)
+                      const Divider(
+                        color: Colors.transparent,
+                      ),
+                    OutlinedButton(
+                      style: buttonStyle,
+                      child: const Text("WRONG"),
+                      onPressed: () {
+                        answer(false);
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

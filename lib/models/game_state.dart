@@ -60,13 +60,13 @@ class GameState {
 
   ///Resets properties
   void reset() {
-    regenerateWord();
+    replaceWord();
     _remainingSeconds = settings.seconds;
     _answers.clear();
   }
 
   ///Reset [EnglishWord] by calling its randomize() method
-  void regenerateWord() {
+  void replaceWord() {
     _word = EnglishWord();
   }
 }

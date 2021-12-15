@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../manager/padding.dart';
 
 class DialogRow extends StatelessWidget {
-  final Function? callback;
+  final void Function()? callback;
   final String textLeft;
   final String textRight;
 
@@ -25,7 +25,7 @@ class DialogRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ElevatedButton(
-            onPressed: callback as void Function()? ?? () {},
+            onPressed: callback ?? () {},
             child: Text(textRight),
             style: ButtonStyle(
               textStyle: MaterialStateProperty.all<TextStyle>(

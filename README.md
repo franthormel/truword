@@ -1,6 +1,6 @@
 # Truword
 
-Flutter game for checking if the text displayed is a valid English word or not.
+Flutter game for the vocabulary with English words.
 
 This project is also available through 
 
